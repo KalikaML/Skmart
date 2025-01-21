@@ -182,17 +182,18 @@ def model_pred(model,df):
 # def lstm_model(df):
 #     model=model_train_triger(df)
 
-# if __name__ == '__main__':
-    ## load the downloaded dataset or user to get data from nse
+if __name__ == '__main__':
+    # load the downloaded dataset or user to get data from nse
 
-    # df=pd.read_csv('../../data/stock_metadata/NIFTY BANK_Data.csv')
-    # train_data,test_data=data_prep(df)
+    df=pd.read_csv('../../data/stock_metadata/NIFTY BANK_Data.csv')
+    train_data,test_data=data_prep(df)
     # reshape into X=t,t+1,t+2,t+3 and Y=t+4
-    # time_step = 100
+    time_step = 100
 
-    # X_train, y_train, X_test, ytest=model_data(train_data,test_data)
+    X_train, y_train, X_test, ytest=model_data(train_data,test_data)
 
 
-    # model=lstm_model(X_train, y_train, X_test, ytest)
+    model=lstm_model(X_train, y_train, X_test, ytest)
+    model.save("")
+    ## runs good gives option to save
 
-    ### runs good gives option to save
