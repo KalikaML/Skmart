@@ -1,13 +1,12 @@
 # Skmart
-
-1. Design architecture diagram
-   - Notebooklm
-   - sagemaker
-2. Graph RAG database
-
-
 Project
-1) Kite udemy
+problem statement : Build Trading bot which will buy and sell equity stocks for 1% profit daily on capital invesment along with it
+                     it will give the user complete overview and news analysis of equity on daily basis before market opens.
+
+Steps : 
+         1) Train the ML model on nifty data.
+         2) Which equity stocks have probability of giving 1% profit.
+         3) Kite API access and understand buy and sell process.
 
 week1 :
 Resource collection and environment set
