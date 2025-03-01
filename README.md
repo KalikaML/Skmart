@@ -13,7 +13,7 @@ Steps :
 
 ### Approaches 
 1. For all symbols or stocks in index one generalize ML model: 10 symbols with nifty weightage,
-  1)  Identify  10 high volume of stocks for the next week and train: explore (screener)[https://github.com/pranjal-joshi/Screeni-py]
+  1)  Identify  10 high volume of stocks for the next week and train: explore [screener](https://github.com/pranjal-joshi/Screeni-py)
 
  
 
