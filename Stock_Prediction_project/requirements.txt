@@ -6,4 +6,6 @@ keras
 tensorflow
 plotly
 scikit-learn
+xgboost
+
 
