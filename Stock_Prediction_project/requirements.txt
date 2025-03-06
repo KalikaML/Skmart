@@ -5,4 +5,5 @@ joblib
 keras
 tensorflow
 plotly
-sklearn
+scikit-learn
+
