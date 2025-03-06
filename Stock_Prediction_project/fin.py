@@ -7,11 +7,16 @@ from tensorflow.keras.models import load_model
 from datetime import timedelta
 import plotly.graph_objects as go
 import plotly.express as px
+import os
+import streamlit as st
+
+st.write("Current Working Directory:", os.getcwd())
 
 # Function to load models efficiently with caching
 @st.cache_resource()
 def load_models():
     try:
+        
         lstm = load_model('./lstm_model_all.h5', custom_objects={'mse': keras.losses.MeanSquaredError()})
         xgb = joblib.load('./xgb_model_all.pkl')
         scalers = joblib.load('./scalers.pkl')
