@@ -12,10 +12,10 @@ import plotly.express as px
 @st.cache_resource()
 def load_models():
     try:
-        lstm = load_model('lstm_model_all.h5', custom_objects={'mse': keras.losses.MeanSquaredError()})
-        xgb = joblib.load('xgb_model_all.pkl')
-        scalers = joblib.load('scalers.pkl')
-        scaler_xgb = joblib.load('scaler_xgb.pkl')
+        lstm = load_model('./lstm_model_all.h5', custom_objects={'mse': keras.losses.MeanSquaredError()})
+        xgb = joblib.load('./xgb_model_all.pkl')
+        scalers = joblib.load('./scalers.pkl')
+        scaler_xgb = joblib.load('./scaler_xgb.pkl')
         return {"lstm": lstm, "xgb": xgb, "scalers": scalers, "scaler_xgb": scaler_xgb}
     except Exception as e:
         st.error(f"Error loading models: {e}")
@@ -25,8 +25,8 @@ def load_models():
 @st.cache_data()
 def load_data():
     try:
-        company_df = pd.read_csv('EQUITY_L.csv')
-        price_df = pd.read_csv('all_stocks_data.csv')
+        company_df = pd.read_csv('./EQUITY_L.csv')
+        price_df = pd.read_csv('./all_stocks_data.csv')
         price_df['Date'] = pd.to_datetime(price_df['Date'])
         price_df = price_df.groupby('Symbol').apply(add_features).reset_index(drop=True)
         price_df = price_df.dropna()
