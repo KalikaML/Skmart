@@ -16,7 +16,7 @@ st.write("Current Working Directory:", os.getcwd())
 @st.cache_resource()
 def load_models():
     try:
-        
+        st.write("Current Working Directory:", os.getcwd())
         lstm = load_model('./lstm_model_all.h5', custom_objects={'mse': keras.losses.MeanSquaredError()})
         xgb = joblib.load('./xgb_model_all.pkl')
         scalers = joblib.load('./scalers.pkl')
