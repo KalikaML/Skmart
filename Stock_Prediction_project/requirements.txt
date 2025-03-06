@@ -5,3 +5,4 @@ joblib
 keras
 tensorflow
 plotly
+sklearn
