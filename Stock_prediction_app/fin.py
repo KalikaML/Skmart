@@ -17,10 +17,10 @@ st.write("Current Working Directory:", os.getcwd())
 def load_models():
     try:
         st.write("Current Working Directory:", os.getcwd())
-        lstm = load_model('./Stock_Prediction_project/lstm_model_all.h5', custom_objects={'mse': keras.losses.MeanSquaredError()})
-        xgb = joblib.load('./Stock_Prediction_project/xgb_model_all.pkl')
-        scalers = joblib.load('./Stock_Prediction_project/scalers.pkl')
-        scaler_xgb = joblib.load('./Stock_Prediction_project/scaler_xgb.pkl')
+        lstm = load_model('./Stock_prediction_app/lstm_model_all.h5', custom_objects={'mse': keras.losses.MeanSquaredError()})
+        xgb = joblib.load('./Stock_prediction_app/xgb_model_all.pkl')
+        scalers = joblib.load('./Stock_prediction_app/scalers.pkl')
+        scaler_xgb = joblib.load('./Stock_prediction_app/scaler_xgb.pkl')
         return {"lstm": lstm, "xgb": xgb, "scalers": scalers, "scaler_xgb": scaler_xgb}
     except Exception as e:
         st.error(f"Error loading models: {e}")
@@ -30,8 +30,8 @@ def load_models():
 @st.cache_data()
 def load_data():
     try:
-        company_df = pd.read_csv('./Stock_Prediction_project/EQUITY_L.csv')
-        price_df = pd.read_csv('./Stock_Prediction_project/all_stocks_data.csv')
+        company_df = pd.read_csv('./Stock_prediction_app/EQUITY_L.csv')
+        price_df = pd.read_csv('./Stock_prediction_app/all_stocks_data.csv')
         price_df['Date'] = pd.to_datetime(price_df['Date'])
         price_df = price_df.groupby('Symbol').apply(add_features).reset_index(drop=True)
         price_df = price_df.dropna()
