@@ -1,0 +1,32 @@
+name: Update Stock Data
+
+on:
+  schedule:
+    - cron: '0 10 * * *'  # Runs daily at 10:00 UTC (3:30 PM IST)
+
+jobs:
+  update_data:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        pip install yfinance pandas
+
+    - name: Run update_data.py
+      run: python update_data.py
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add all_stocks_data.csv
+        git commit -m "Update stock data" || echo "No changes to commit"
+        git push
