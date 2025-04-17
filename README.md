@@ -1,4 +1,4 @@
-# Skmart
+# stk-bot
 ### Project
 problem statement : Build Trading bot which will buy and sell equity stocks for 1% profit daily on capital invesment along with it
                      it will give the user complete overview and news analysis of equity on daily basis before market opens.
