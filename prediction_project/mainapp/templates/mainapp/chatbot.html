@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Chatbot{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Chatbot</h1>
+    <div id="chat-window" style="height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; background: #fafafa;"></div>
+    <div class="input-group mt-3">
+        <input type="text" id="chat-input" class="form-control" placeholder="Type your message...">
+        <button id="send-btn" class="btn btn-primary">Send</button>
+    </div>
+</div>
+
+<script>
+    let currentSessionId = null;
+
+    function appendMessage(role, content) {
+        const chatWindow = document.getElementById('chat-window');
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('mb-2');
+        if (role === 'user') {
+            msgDiv.innerHTML = `<strong>You:</strong> ${content}`;
+            msgDiv.style.textAlign = 'right';
+        } else {
+            msgDiv.innerHTML = `<strong>Assistant:</strong> ${content}`;
+            msgDiv.style.textAlign = 'left';
+        }
+        chatWindow.appendChild(msgDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('chat-input');
+        const message = input.value.trim();
+        if (!message) return;
+        appendMessage('user', message);
+        input.value = '';
+        fetch('/chatbot/api/message/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken')},
+            body: JSON.stringify({message: message, session_id: currentSessionId})
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                currentSessionId = data.session_id;
+                appendMessage('assistant', data.message);
+            } else {
+                appendMessage('assistant', 'Error: ' + data.message);
+            }
+        });
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.slice(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    document.getElementById('send-btn').addEventListener('click', sendMessage);
+    document.getElementById('chat-input').addEventListener('keypress', e => {
+        if (e.key === 'Enter') sendMessage();
+    });
+</script>
+{% endblock %}

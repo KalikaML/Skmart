@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Dashboard</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Prediction Graph</h3>
+            <div id="prediction-graph" style="height: 400px;"></div>
+        </div>
+        <div class="col-md-6">
+            <h3>Real-time Data Graph</h3>
+            <div id="real-time-graph" style="height: 400px;"></div>
+        </div>
+    </div>
+    <button id="refresh-predictions" class="btn btn-primary mt-3">Refresh Predictions</button>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    let predictionData = [];
+    let realTimeData = [];
+    let realTimeInterval;
+
+    function fetchDashboardData() {
+        fetch('/api/dashboard-data/')
+            .then(res => res.json())
+            .then(data => {
+                predictionData = data.predictions;
+                realTimeData = data.historical_data;
+                drawPredictionGraph();
+                drawRealTimeGraph();
+            });
+    }
+
+    function drawPredictionGraph() {
+        const categories = [...new Set(predictionData.map(d => d.category))];
+        const traces = categories.map(cat => {
+            const catData = predictionData.filter(d => d.category === cat);
+            return {
+                x: catData.map(d => d.timestamp),
+                y: catData.map(d => d.value),
+                mode: 'lines+markers',
+                name: cat
+            };
+        });
+        Plotly.newPlot('prediction-graph', traces, {title: 'Predictions'});
+    }
+
+    function drawRealTimeGraph() {
+        const categories = [...new Set(realTimeData.map(d => d.category))];
+        const traces = categories.map(cat => {
+            const catData = realTimeData.filter(d => d.category === cat);
+            return {
+                x: catData.map(d => d.timestamp),
+                y: catData.map(d => d.value),
+                mode: 'lines+markers',
+                name: cat
+            };
+        });
+        Plotly.newPlot('real-time-graph', traces, {title: 'Real-time Data'});
+    }
+
+    function fetchRealTimeData() {
+        fetch('/api/real-time-data/')
+            .then(res => res.json())
+            .then(data => {
+                realTimeData = realTimeData.concat(data.real_time_data);
+                drawRealTimeGraph();
+            });
+    }
+
+    function refreshPredictions() {
+        fetch('/api/predictions/')
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    predictionData = predictionData.concat(data.predictions);
+                    drawPredictionGraph();
+                }
+            });
+    }
+
+    document.getElementById('refresh-predictions').addEventListener('click', refreshPredictions);
+
+    fetchDashboardData();
+    realTimeInterval = setInterval(fetchRealTimeData, 5000);
+</script>
+{% endblock %}
